@@ -1,6 +1,7 @@
 #include <iostream>
+#include "../obj/money.h"
 
 int main(){
-    std::cout<<"Bofa"<<std::endl;
+    
     return 0;
 }
