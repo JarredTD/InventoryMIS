@@ -8,7 +8,7 @@ class Product {
     
         // Constructors
         Product();
-        Product(const std::string& name, const std::string& description, const double& price, const int& quantity, const stdd:string& supplier)
+        Product(const std::string& name, const std::string& description, const double& price, const int& quantity, const stdd:string& supplier);
     
         // Getters
         const std::string& getName() const;
