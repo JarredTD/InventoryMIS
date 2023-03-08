@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS= -std=c++11 -c -Wall
+CFLAGS= -c -Wall -m64
 LDFLAGS=
 
 NAME=InventoryMIS
@@ -17,15 +17,15 @@ EXECUTABLE=$(BIN_DIR)/$(NAME)
 TEST_EXECUTABLE=$(BIN_DIR)/test
 
 # Path to the Doctest header directory
-DOCTEST_INC_DIR := ../doctest
+DOCTEST_INC_DIR := ./test/doctest
 
-build: $(SRC_DIR) $(BIN_DIR) $(EXECUTABLE)
+build: $(BIN_DIR) $(OBJ_DIR) $(EXECUTABLE)
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
-$(SRC_DIR):
-	mkdir -p $(SRC_DIR)
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) -I$(DOCTEST_INC_DIR) $< -o $@
