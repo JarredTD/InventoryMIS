@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS= -c -Wall -m64
+CFLAGS= -std=c++11 -c -Wall
 LDFLAGS=
 
 NAME=InventoryMIS
@@ -17,15 +17,15 @@ EXECUTABLE=$(BIN_DIR)/$(NAME)
 TEST_EXECUTABLE=$(BIN_DIR)/test
 
 # Path to the Doctest header directory
-DOCTEST_INC_DIR := ./test/doctest
+DOCTEST_INC_DIR := ../doctest
 
-build: $(BIN_DIR) $(OBJ_DIR) $(EXECUTABLE)
+build: $(SRC_DIR) $(BIN_DIR) $(EXECUTABLE)
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+$(SRC_DIR):
+	mkdir -p $(SRC_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) -I$(DOCTEST_INC_DIR) $< -o $@
@@ -36,11 +36,16 @@ $(OBJ_DIR)/%.o: $(TEST_DIR)/%.cpp
 $(EXECUTABLE): $(OBJ)
 	$(CC) $(LDFLAGS) $(OBJ) -o $@
 
-test: $(TEST_OBJ)
-	$(CC) -o $(TEST_EXECUTABLE) $(TEST_OBJ) $(OBJ) -I$(DOCTEST_INC_DIR) -lpthread
-	$(TEST_EXECUTABLE)
+$(BIN_DIR)/%Test: $(OBJ_DIR)/%.o $(OBJ)
+	$(CC) -o $@ $^ -I$(DOCTEST_INC_DIR) -lpthread
+
+test: $(TEST_OBJ) $(TEST_SRC:%.cpp=$(BIN_DIR)/%Test)
+	@for test in $(TEST_SRC:%.cpp=%); do \
+		echo "Running test: $$test"; \
+		./bin/$$test; \
+	done
 
 clean:
-	rm -rf $(OBJ_DIR)/*.o $(EXECUTABLE) $(TEST_EXECUTABLE)
+	rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/*
 
 .PHONY: build clean test
